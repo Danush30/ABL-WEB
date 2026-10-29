@@ -1,635 +1,308 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AccessHub - Login & Register</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AccessHub - Login and Register</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-<style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            color: #303039;
+            background: #e5ebff;
+        }
 
-body {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 25px;
-    font-family: 'Poppins', Arial, sans-serif;
-    background: linear-gradient(120deg, #dce5ff, #c8d8ff);
-    color: #303039;
-}
+        .view-toggle {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+        }
 
-.container {
-    width: 100%;
-    max-width: 1100px;
-    min-height: 490px;
-    display: grid;
-    grid-template-columns: 1.05fr 1fr;
-    background: white;
-    border-radius: 28px;
-    overflow: hidden;
-    box-shadow: 0 18px 48px rgba(47, 66, 117, 0.18);
-}
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            max-width: 900px;
+            overflow: hidden;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px #26396824;
+        }
 
-.welcome {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: white;
-    padding: 35px;
-    background: linear-gradient(145deg, #7e9cf0, #7190e8);
-    border-radius: 28px 145px 145px 28px;
-}
+        .welcome {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+            color: white;
+            background: #718de3;
+        }
 
-.welcome h2 {
-    font-size: 2.1rem;
-    margin-bottom: 8px;
-}
+        .welcome h1 {
+            margin: 0 0 12px;
+        }
 
-.welcome p {
-    font-size: 0.9rem;
-    margin-bottom: 22px;
-}
+        .welcome p {
+            line-height: 1.5;
+        }
 
-.outline-btn {
-    min-width: 145px;
-    padding: 10px 20px;
-    color: white;
-    border: 1.5px solid white;
-    background: transparent;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-}
+        .form-panel {
+            padding: 40px;
+        }
 
-.outline-btn:hover {
-    background: white;
-    color: #6685e3;
-}
+        .form-content {
+            max-width: 360px;
+            margin: 0 auto;
+        }
 
-.form-panel {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 55px;
-}
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
 
-.form-content {
-    width: 100%;
-    max-width: 360px;
-}
+        .tabs label {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            color: #555;
+            background: #f0f2f8;
+            border-radius: 6px;
+            cursor: pointer;
+        }
 
-.mobile-welcome {
-    display: none;
-}
+        #login:checked ~ main .tabs label[for="login"],
+        #register:checked ~ main .tabs label[for="register"],
+        #recover:checked ~ main .tabs label[for="recover"] {
+            color: white;
+            background: #718de3;
+        }
 
-h1 {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 25px;
-}
+        .form-view {
+            display: none;
+        }
 
-.message {
-    min-height: 22px;
-    text-align: center;
-    font-size: 0.78rem;
-    color: #17854b;
-    margin-bottom: 10px;
-}
+        #login:checked ~ main #loginForm,
+        #register:checked ~ main #registerForm,
+        #recover:checked ~ main #recoverForm {
+            display: block;
+        }
 
-.message.error {
-    color: #d94355;
-}
+        h2 {
+            margin: 0 0 20px;
+            text-align: center;
+        }
 
-.form-view {
-    display: none;
-}
+        .field {
+            margin-bottom: 16px;
+        }
 
-.form-view.active {
-    display: block;
-}
+        .field label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
 
-.field {
-    margin-bottom: 17px;
-}
+        .field input {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #c9cbd3;
+            border-radius: 6px;
+            font: inherit;
+        }
 
-.field label {
-    display: block;
-    font-size: 0.82rem;
-    margin-bottom: 7px;
-    color: #51515a;
-}
+        .field input:focus {
+            border-color: #718de3;
+            outline: 2px solid #718de344;
+        }
 
-.input-wrap {
-    position: relative;
-}
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin: 4px 0 18px;
+            font-size: 14px;
+        }
 
-.input-wrap input {
-    width: 100%;
-    padding: 13px 42px 13px 16px;
-    border: 1px solid transparent;
-    border-radius: 8px;
-    background: linear-gradient(145deg, #f6f6f7, #ededee);
-    outline: none;
-    font-family: inherit;
-    font-size: 0.85rem;
-}
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
 
-.input-wrap input:focus {
-    border-color: #8ba4f1;
-    box-shadow: 0 0 0 3px rgba(120, 149, 237, 0.2);
-    background: white;
-}
+        .link,
+        .submit-button {
+            color: #4f6fc9;
+            font: inherit;
+            cursor: pointer;
+        }
 
-.input-wrap span {
-    position: absolute;
-    right: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-}
+        .link {
+            padding: 0;
+            border: 0;
+            background: none;
+        }
 
-.form-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 18px;
-}
+        .submit-button {
+            width: 100%;
+            padding: 12px;
+            border: 0;
+            border-radius: 6px;
+            color: white;
+            background: #718de3;
+        }
 
-.remember {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.73rem;
-    color: #666a74;
-}
+        .submit-button:hover {
+            background: #5d79cf;
+        }
 
-.remember input {
-    accent-color: #7895ed;
-}
+        .switch-text,
+        .note {
+            text-align: center;
+            line-height: 1.5;
+        }
 
-.text-btn {
-    border: none;
-    background: none;
-    cursor: pointer;
-    color: #555965;
-    font-size: 0.76rem;
-}
+        .switch-text {
+            margin: 18px 0 0;
+            font-size: 14px;
+        }
 
-.text-btn:hover {
-    color: #6685e3;
-    text-decoration: underline;
-}
+        .note {
+            margin: 24px 0 0;
+            color: #666;
+            font-size: 12px;
+        }
 
-.primary-btn {
-    width: 100%;
-    padding: 13px;
-    color: white;
-    background: linear-gradient(110deg, #7c98ed, #6f8ce7);
-    border: none;
-    border-radius: 8px;
-    font-family: inherit;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-}
+        #login:focus-visible ~ main .tabs label[for="login"],
+        #register:focus-visible ~ main .tabs label[for="register"],
+        #recover:focus-visible ~ main .tabs label[for="recover"] {
+            outline: 2px solid #303039;
+        }
 
-.primary-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 7px 16px rgba(110, 139, 230, 0.3);
-}
+        @media (max-width: 650px) {
+            body {
+                padding: 16px;
+            }
 
-.caption {
-    text-align: center;
-    font-size: 0.8rem;
-    color: #565862;
-    margin: 18px 0 13px;
-}
+            .container {
+                grid-template-columns: 1fr;
+            }
 
-.socials {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-}
+            .welcome {
+                padding: 24px;
+            }
 
-.social-btn {
-    width: 42px;
-    height: 42px;
-    display: grid;
-    place-items: center;
-    background: white;
-    border: 1px solid #d7d7db;
-    border-radius: 9px;
-    font-weight: 700;
-    color: #303039;
-    cursor: pointer;
-}
+            .welcome h1 {
+                font-size: 24px;
+            }
 
-.social-btn:hover {
-    background: #f2f5ff;
-}
-
-.switch-text {
-    text-align: center;
-    font-size: 0.78rem;
-    margin-top: 20px;
-    color: #777b88;
-}
-
-.switch-text button {
-    border: none;
-    background: none;
-    color: #6685e3;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.note {
-    margin-top: 18px;
-    font-size: 0.65rem;
-    text-align: center;
-    color: #989aa3;
-    line-height: 1.6;
-}
-
-@media (max-width: 700px) {
-    body {
-        padding: 15px;
-    }
-
-    .container {
-        max-width: 440px;
-        grid-template-columns: 1fr;
-        min-height: auto;
-        border-radius: 22px;
-    }
-
-    .welcome {
-        display: none;
-    }
-
-    .form-panel {
-        padding: 25px 22px;
-    }
-
-    .mobile-welcome {
-        display: block;
-        text-align: center;
-        color: white;
-        background: linear-gradient(140deg, #7e9cf0, #7190e8);
-        margin: -25px -22px 25px;
-        padding: 23px 15px;
-        border-radius: 22px 22px 58px 58px;
-    }
-
-    .mobile-welcome h2 {
-        font-size: 1.35rem;
-        margin-bottom: 5px;
-    }
-
-    .mobile-welcome p {
-        font-size: 0.72rem;
-        margin-bottom: 12px;
-    }
-
-    .mobile-welcome .outline-btn {
-        min-width: 115px;
-        padding: 7px 18px;
-        font-size: 0.75rem;
-    }
-
-    h1 {
-        font-size: 1.65rem;
-    }
-}
-</style>
+            .form-panel {
+                padding: 24px;
+            }
+        }
+    </style>
 </head>
-
 <body>
+    <input class="view-toggle" type="radio" name="view" id="login" checked>
+    <input class="view-toggle" type="radio" name="view" id="register">
+    <input class="view-toggle" type="radio" name="view" id="recover">
 
-<main class="container">
+    <main class="container">
+        <section class="welcome">
+            <h1>Welcome to AccessHub</h1>
+            <p>Sign in to your account or create a new one to get started.</p>
+        </section>
 
-    <section class="welcome">
-        <h2 id="sideTitle">Hello, Welcome!</h2>
-        <p id="sideText">Don't have an account?</p>
-        <button class="outline-btn" id="sideButton" type="button">
-            Register
-        </button>
-    </section>
+        <section class="form-panel">
+            <div class="form-content">
+                <nav class="tabs" aria-label="Account options">
+                    <label for="login">Login</label>
+                    <label for="register">Register</label>
+                    <label for="recover">Reset password</label>
+                </nav>
 
-    <section class="form-panel">
-        <div class="form-content">
-
-            <div class="mobile-welcome">
-                <h2 id="mobileTitle">Hello, Welcome!</h2>
-                <p id="mobileText">Don't have an account?</p>
-                <button class="outline-btn" id="mobileButton" type="button">
-                    Register
-                </button>
-            </div>
-
-            <div id="message" class="message" role="status" aria-live="polite"></div>
-
-            <!-- LOGIN FORM -->
-            <form id="loginForm" class="form-view active" novalidate>
-                <h1>Login</h1>
-
-                <div class="field">
-                    <label for="loginEmail">Username or email</label>
-                    <div class="input-wrap">
-                        <input id="loginEmail" type="text"
-                            placeholder="Username or email"
+                <form id="loginForm" class="form-view" action="#" method="post">
+                    <h2>Login</h2>
+                    <div class="field">
+                        <label for="loginEmail">Username or email</label>
+                        <input id="loginEmail" name="username" type="text"
                             autocomplete="username" required>
-                        <span aria-hidden="true">👤</span>
                     </div>
-                </div>
-
-                <div class="field">
-                    <label for="loginPassword">Password</label>
-                    <div class="input-wrap">
-                        <input id="loginPassword" type="password"
-                            placeholder="Password"
+                    <div class="field">
+                        <label for="loginPassword">Password</label>
+                        <input id="loginPassword" name="password" type="password"
                             autocomplete="current-password" required>
-                        <span aria-hidden="true">🔒</span>
                     </div>
-                </div>
+                    <div class="form-row">
+                        <label class="remember">
+                            <input type="checkbox" name="remember">
+                            Remember me
+                        </label>
+                        <label class="link" for="recover">Forgot password?</label>
+                    </div>
+                    <button class="submit-button" type="submit">Login</button>
+                    <p class="switch-text">
+                        Don't have an account?
+                        <label class="link" for="register">Register</label>
+                    </p>
+                </form>
 
-                <div class="form-row">
-                    <label class="remember">
-                        <input type="checkbox" id="remember">
-                        Remember me
-                    </label>
-                    <button class="text-btn" type="button" data-view="recover">
-                        Forgot Password?
-                    </button>
-                </div>
-
-                <button class="primary-btn" type="submit">Login</button>
-
-                <p class="caption">or login with social platforms</p>
-
-                <div class="socials">
-                    <button class="social-btn" type="button" aria-label="Google demo">G</button>
-                    <button class="social-btn" type="button" aria-label="Facebook demo">f</button>
-                    <button class="social-btn" type="button" aria-label="GitHub demo">●</button>
-                    <button class="social-btn" type="button" aria-label="LinkedIn demo">in</button>
-                </div>
-
-                <p class="switch-text">
-                    Don't have an account?
-                    <button type="button" data-view="register">Register</button>
-                </p>
-            </form>
-
-            <!-- REGISTRATION FORM -->
-            <form id="registerForm" class="form-view" novalidate>
-                <h1>Register</h1>
-
-                <div class="field">
-                    <label for="fullName">Full name</label>
-                    <div class="input-wrap">
-                        <input id="fullName" type="text"
-                            placeholder="Enter your full name"
+                <form id="registerForm" class="form-view" action="#" method="post">
+                    <h2>Create an account</h2>
+                    <div class="field">
+                        <label for="fullName">Full name</label>
+                        <input id="fullName" name="name" type="text"
                             autocomplete="name" required>
-                        <span aria-hidden="true">👤</span>
                     </div>
-                </div>
-
-                <div class="field">
-                    <label for="registerEmail">Email address</label>
-                    <div class="input-wrap">
-                        <input id="registerEmail" type="email"
-                            placeholder="you@example.com"
+                    <div class="field">
+                        <label for="registerEmail">Email address</label>
+                        <input id="registerEmail" name="email" type="email"
                             autocomplete="email" required>
-                        <span aria-hidden="true">✉</span>
                     </div>
-                </div>
-
-                <div class="field">
-                    <label for="registerPassword">Password</label>
-                    <div class="input-wrap">
-                        <input id="registerPassword" type="password"
-                            placeholder="At least 8 characters"
-                            autocomplete="new-password" required>
-                        <span aria-hidden="true">🔒</span>
+                    <div class="field">
+                        <label for="registerPassword">Password</label>
+                        <input id="registerPassword" name="password" type="password"
+                            autocomplete="new-password" minlength="8" required>
                     </div>
-                </div>
+                    <button class="submit-button" type="submit">Create account</button>
+                    <p class="switch-text">
+                        Already have an account?
+                        <label class="link" for="login">Login</label>
+                    </p>
+                </form>
 
-                <div class="field">
-                    <label for="confirmPassword">Confirm password</label>
-                    <div class="input-wrap">
-                        <input id="confirmPassword" type="password"
-                            placeholder="Repeat your password"
-                            autocomplete="new-password" required>
-                        <span aria-hidden="true">🔒</span>
-                    </div>
-                </div>
-
-                <button class="primary-btn" type="submit">Create Account</button>
-
-                <p class="switch-text">
-                    Already have an account?
-                    <button type="button" data-view="login">Login</button>
-                </p>
-            </form>
-
-            <!-- PASSWORD RECOVERY FORM -->
-            <form id="recoverForm" class="form-view" novalidate>
-                <h1>Forgot Password?</h1>
-                <p class="caption">Enter your registered email address.</p>
-
-                <div class="field">
-                    <label for="recoverEmail">Email address</label>
-                    <div class="input-wrap">
-                        <input id="recoverEmail" type="email"
-                            placeholder="you@example.com"
+                <form id="recoverForm" class="form-view" action="#" method="post">
+                    <h2>Reset password</h2>
+                    <p class="switch-text">Enter your email address to request a password reset.</p>
+                    <div class="field">
+                        <label for="recoverEmail">Email address</label>
+                        <input id="recoverEmail" name="email" type="email"
                             autocomplete="email" required>
-                        <span aria-hidden="true">✉</span>
                     </div>
-                </div>
+                    <button class="submit-button" type="submit">Request reset</button>
+                    <p class="switch-text">
+                        <label class="link" for="login">Back to login</label>
+                    </p>
+                </form>
 
-                <button class="primary-btn" type="submit">Reset Password</button>
-
-                <p class="switch-text">
-                    <button type="button" data-view="login">Back to Login</button>
-                </p>
-            </form>
-
-            <p class="note">
-                Student account interface · Demo only<br>
-                Real authentication requires a secure backend.
-            </p>
-        </div>
-    </section>
-
-</main>
-
-<script>
-const $ = id => document.getElementById(id);
-const USERS_KEY = "accessHubDemoUsers";
-
-function getUsers() {
-    try {
-        return JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
-    } catch {
-        return [];
-    }
-}
-
-function validEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-function showMessage(text, error = false) {
-    $("message").textContent = text;
-    $("message").classList.toggle("error", error);
-}
-
-function showView(view) {
-    ["login", "register", "recover"].forEach(name => {
-        $(name + "Form").classList.toggle("active", name === view);
-    });
-
-    showMessage("");
-
-    const registering = view === "register";
-    const recovering = view === "recover";
-    const title = registering ? "Welcome Back!" : "Hello, Welcome!";
-    const copy = registering
-        ? "Already have an account?"
-        : recovering
-            ? "Let's get you back in."
-            : "Don't have an account?";
-    const buttonText = registering ? "Login" : "Register";
-
-    $("sideTitle").textContent = title;
-    $("mobileTitle").textContent = title;
-    $("sideText").textContent = copy;
-    $("mobileText").textContent = copy;
-    $("sideButton").textContent = buttonText;
-    $("mobileButton").textContent = buttonText;
-
-    $("sideButton").dataset.view = registering ? "login" : "register";
-    $("mobileButton").dataset.view = registering ? "login" : "register";
-
-    $("sideButton").style.visibility = recovering ? "hidden" : "visible";
-    $("mobileButton").style.visibility = recovering ? "hidden" : "visible";
-}
-
-document.addEventListener("click", event => {
-    const button = event.target.closest("[data-view]");
-    if (button) showView(button.dataset.view);
-});
-
-$("registerForm").addEventListener("submit", event => {
-    event.preventDefault();
-
-    const name = $("fullName").value.trim();
-    const email = $("registerEmail").value.trim().toLowerCase();
-    const password = $("registerPassword").value;
-    const confirm = $("confirmPassword").value;
-
-    if (name.length < 2)
-        return showMessage("Please enter your full name.", true);
-
-    if (!validEmail(email))
-        return showMessage("Please enter a valid email address.", true);
-
-    if (password.length < 8 ||
-        !/[A-Za-z]/.test(password) ||
-        !/\d/.test(password)) {
-        return showMessage(
-            "Use at least 8 characters, including a letter and a number.",
-            true
-        );
-    }
-
-    if (password !== confirm)
-        return showMessage("Passwords do not match.", true);
-
-    const users = getUsers();
-
-    if (users.some(user => user.email === email))
-        return showMessage("This email is already registered.", true);
-
-    // Demo storage only. Never store real passwords this way.
-    users.push({ name, email, password });
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-
-    showView("login");
-    $("loginEmail").value = email;
-    showMessage("Demo account created! You can now log in.");
-});
-
-$("loginForm").addEventListener("submit", event => {
-    event.preventDefault();
-
-    const login = $("loginEmail").value.trim().toLowerCase();
-    const password = $("loginPassword").value;
-
-    if (!login || !password)
-        return showMessage("Enter your username/email and password.", true);
-
-    const user = getUsers().find(item =>
-        (item.email === login || item.name.toLowerCase() === login) &&
-        item.password === password
-    );
-
-    if (!user)
-        return showMessage("Account not found. Please register first.", true);
-
-    const session = JSON.stringify({
-        name: user.name,
-        email: user.email
-    });
-
-    if ($("remember").checked) {
-        localStorage.setItem("accessHubDemoSession", session);
-    } else {
-        sessionStorage.setItem("accessHubDemoSession", session);
-    }
-
-    showMessage("Welcome, " + user.name + "! Demo login successful.");
-});
-
-$("recoverForm").addEventListener("submit", event => {
-    event.preventDefault();
-
-    const email = $("recoverEmail").value.trim().toLowerCase();
-
-    if (!validEmail(email))
-        return showMessage("Please enter a valid email address.", true);
-
-    const exists = getUsers().some(user => user.email === email);
-
-    showMessage(
-        exists
-            ? "Demo only: no reset email was sent. A backend email service is required."
-            : "If this account exists, a real service would send reset instructions."
-    );
-});
-
-try {
-    const session = JSON.parse(
-        localStorage.getItem("accessHubDemoSession") || "null"
-    );
-
-    if (session && session.email) {
-        $("loginEmail").value = session.email;
-    }
-} catch {
-    // Ignore invalid demo session data.
-}
-
-showView("login");
-</script>
-
+                <p class="note">Demo interface only. Authentication requires a server.</p>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
